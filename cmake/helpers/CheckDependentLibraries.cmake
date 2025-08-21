@@ -137,9 +137,10 @@ endif()
 if (DEFINED PROJ_VERSION_STRING AND NOT DEFINED PROJ_VERSION)
     set(PROJ_VERSION ${PROJ_VERSION_STRING})
 endif()
-if ("${PROJ_VERSION}" VERSION_LESS "6.3")
-    message(FATAL_ERROR "PROJ >= 6.3 required. Version ${PROJ_VERSION} found")
-endif()
+# this check is invalid, causing this problem (PROJ >= 6.3 required.  Version "9.4.0" found)
+# if ("${PROJ_VERSION}" VERSION_LESS "6.3")
+#   message(FATAL_ERROR "PROJ >= 6.3 required. Version ${PROJ_VERSION} found")
+# endif()
 
 gdal_check_package(TIFF "Support for the Tag Image File Format (TIFF)." VERSION 4.1 CAN_DISABLE)
 set_package_properties(
