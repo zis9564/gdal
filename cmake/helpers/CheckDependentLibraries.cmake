@@ -89,11 +89,18 @@ endif()
 
 gdal_check_package(LibXml2 "Read and write XML formats" CAN_DISABLE)
 
-gdal_check_package(EXPAT "Read and write XML formats" RECOMMENDED CAN_DISABLE
-  NAMES expat
-  TARGETS expat::expat EXPAT::EXPAT
-)
-if(EXPAT_FOUND AND NOT DEFINED EXPAT_TARGET)
+# --- EXPAT OVERRIDE ---
+if(DEFINED EXPAT_LIBRARY)
+    message(STATUS "Build-system: Using manual EXPAT: ${EXPAT_LIBRARY}")
+    set(EXPAT_FOUND ON)
+    set(GDAL_USE_EXPAT ON)
+    if(NOT TARGET EXPAT::EXPAT)
+        add_library(EXPAT::EXPAT STATIC IMPORTED)
+        set_target_properties(EXPAT::EXPAT PROPERTIES
+            IMPORTED_LOCATION "${EXPAT_LIBRARY}"
+            INTERFACE_INCLUDE_DIRECTORIES "${EXPAT_INCLUDE_DIR}"
+        )
+    endif()
     set(EXPAT_TARGET EXPAT::EXPAT)
 endif()
 
