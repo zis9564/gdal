@@ -256,7 +256,7 @@ if(DEFINED SQLITE3_LIBRARY)
     message(STATUS "Build-system: Using manual SQLite3: ${SQLITE3_LIBRARY}")
     set(SQLite3_FOUND ON)
     set(GDAL_USE_SQLITE3 ON)
-    set(SQLite3_HAS_COLUMN_METADATA ON
+    set(SQLite3_HAS_COLUMN_METADATA ON)
     set(SQLite3_HAS_MUTEX_ALLOC ON)
     set(SQLite3_HAS_RTREE ON)
 
