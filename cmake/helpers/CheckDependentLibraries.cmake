@@ -155,6 +155,9 @@ if(DEFINED TIFF_LIBRARY)
             INTERFACE_INCLUDE_DIRECTORIES "${TIFF_INCLUDE_DIR}"
         )
     endif()
+    if(NOT TARGET TIFF::LibTIFF)
+        add_library(TIFF::LibTIFF ALIAS TIFF::TIFF)
+    endif()
 endif()
 
 if (DEFINED ENV{CONDA_PREFIX} AND UNIX)
@@ -266,6 +269,9 @@ if(DEFINED SQLITE3_LIBRARY)
             IMPORTED_LOCATION "${SQLITE3_LIBRARY}"
             INTERFACE_INCLUDE_DIRECTORIES "${SQLITE3_INCLUDE_DIR}"
         )
+    endif()
+    if(NOT TARGET SQLite::SQLite3)
+        add_library(SQLite::SQLite3 ALIAS SQLite3::SQLite3)
     endif()
 endif()
 
