@@ -251,9 +251,24 @@ if (NOT GDAL_USE_PCRE2)
   gdal_check_package(PCRE "Enable PCRE support for sqlite3" CAN_DISABLE)
 endif ()
 
-gdal_check_package(SQLite3 "Enable SQLite3 support (used by SQLite/Spatialite, GPKG, Rasterlite, MBTiles, etc.)"
-                   CAN_DISABLE RECOMMENDED
-                   VERSION 3.31)
+# --- SQLITE3 OVERRIDE ---
+if(DEFINED SQLITE3_LIBRARY)
+    message(STATUS "Build-system: Using manual SQLite3: ${SQLITE3_LIBRARY}")
+    set(SQLite3_FOUND ON)
+    set(GDAL_USE_SQLITE3 ON)
+    set(SQLite3_HAS_COLUMN_METADATA ON
+    set(SQLite3_HAS_MUTEX_ALLOC ON)
+    set(SQLite3_HAS_RTREE ON)
+
+    if(NOT TARGET SQLite3::SQLite3)
+        add_library(SQLite3::SQLite3 STATIC IMPORTED)
+        set_target_properties(SQLite3::SQLite3 PROPERTIES
+            IMPORTED_LOCATION "${SQLITE3_LIBRARY}"
+            INTERFACE_INCLUDE_DIRECTORIES "${SQLITE3_INCLUDE_DIR}"
+        )
+    endif()
+endif()
+
 if (SQLite3_FOUND)
   if (NOT DEFINED SQLite3_HAS_COLUMN_METADATA)
     message(FATAL_ERROR "missing SQLite3_HAS_COLUMN_METADATA")
