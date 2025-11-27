@@ -94,6 +94,9 @@ if(DEFINED EXPAT_LIBRARY)
     message(STATUS "Build-system: Using manual EXPAT: ${EXPAT_LIBRARY}")
     set(EXPAT_FOUND ON)
     set(GDAL_USE_EXPAT ON)
+    set(EXPAT_LIBRARIES EXPAT::EXPAT)
+    set(EXPAT_INCLUDE_DIRS ${EXPAT_INCLUDE_DIR})
+
     if(NOT TARGET EXPAT::EXPAT)
         add_library(EXPAT::EXPAT STATIC IMPORTED)
         set_target_properties(EXPAT::EXPAT PROPERTIES
@@ -122,10 +125,9 @@ if(DEFINED PROJ_LIBRARY AND DEFINED PROJ_INCLUDE_DIR)
     message(STATUS "Build-system: Using manual PROJ static lib: ${PROJ_LIBRARY}")
     set(PROJ_FOUND ON)
     set(GDAL_USE_PROJ ON)
-    set(PROJ_LIBRARIES ${PROJ_LIBRARY})
+    set(PROJ_LIBRARIES PROJ::proj)
     set(PROJ_INCLUDE_DIRS ${PROJ_INCLUDE_DIR})
 
-    # Define the imported target
     if(NOT TARGET PROJ::proj)
         add_library(PROJ::proj STATIC IMPORTED)
         set_target_properties(PROJ::proj PROPERTIES
@@ -148,6 +150,9 @@ if(DEFINED TIFF_LIBRARY)
     message(STATUS "Build-system: Using manual TIFF: ${TIFF_LIBRARY}")
     set(TIFF_FOUND ON)
     set(GDAL_USE_TIFF ON)
+    set(TIFF_LIBRARIES TIFF::TIFF)
+    set(TIFF_INCLUDE_DIRS ${TIFF_INCLUDE_DIR})
+
     if(NOT TARGET TIFF::TIFF)
         add_library(TIFF::TIFF STATIC IMPORTED)
         set_target_properties(TIFF::TIFF PROPERTIES
@@ -259,6 +264,9 @@ if(DEFINED SQLITE3_LIBRARY)
     message(STATUS "Build-system: Using manual SQLite3: ${SQLITE3_LIBRARY}")
     set(SQLite3_FOUND ON)
     set(GDAL_USE_SQLITE3 ON)
+    set(SQLite3_LIBRARIES SQLite3::SQLite3)
+    set(SQLite3_INCLUDE_DIRS ${SQLITE3_INCLUDE_DIR})
+
     set(SQLite3_HAS_COLUMN_METADATA ON)
     set(SQLite3_HAS_MUTEX_ALLOC ON)
     set(SQLite3_HAS_RTREE ON)
