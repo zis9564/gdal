@@ -521,11 +521,11 @@ option(GDAL_USE_PUBLICDECOMPWT
 # proprietary libraries KAKADU
 include(CheckDependentLibrariesKakadu)
 
-include(CheckDependentLibrariesArrowParquet)
+#include(CheckDependentLibrariesArrowParquet)
 
-gdal_check_package(OpenDrive "Enable libOpenDRIVE" CONFIG CAN_DISABLE)
+#gdal_check_package(OpenDrive "Enable libOpenDRIVE" CONFIG CAN_DISABLE)
 
-gdal_check_package(AdbcDriverManager "Enable ADBC" CONFIG CAN_DISABLE)
+#gdal_check_package(AdbcDriverManager "Enable ADBC" CONFIG CAN_DISABLE)
 
 # bindings
 
