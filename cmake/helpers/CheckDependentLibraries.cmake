@@ -110,30 +110,24 @@ if (GDAL_USE_CRYPTOPP)
   option(CRYPTOPP_USE_ONLY_CRYPTODLL_ALG "Use Only cryptoDLL alg. only work on dynamic DLL" OFF)
 endif ()
 
-set(GDAL_FIND_PACKAGE_PROJ_MODE "CUSTOM" CACHE STRING "Mode to use for find_package(PROJ): CUSTOM, CONFIG, MODULE or empty string")
-set_property(CACHE GDAL_FIND_PACKAGE_PROJ_MODE PROPERTY STRINGS "CUSTOM" "CONFIG" "MODULE" "")
-if(NOT GDAL_FIND_PACKAGE_PROJ_MODE STREQUAL "CUSTOM")
-    find_package(PROJ ${GDAL_FIND_PACKAGE_PROJ_MODE} REQUIRED)
-    if (NOT BUILD_SHARED_LIBS)
-        string(APPEND GDAL_IMPORT_DEPENDENCIES "find_dependency(PROJ ${GDAL_FIND_PACKAGE_PROJ_MODE})\n")
+# --- CUSTOM PATCH: Manual PROJ Override ---
+if(DEFINED PROJ_LIBRARY AND DEFINED PROJ_INCLUDE_DIR)
+    message(STATUS "Build-system: Using manual PROJ static lib: ${PROJ_LIBRARY}")
+    set(PROJ_FOUND ON)
+    set(GDAL_USE_PROJ ON)
+    set(PROJ_LIBRARIES ${PROJ_LIBRARY})
+    set(PROJ_INCLUDE_DIRS ${PROJ_INCLUDE_DIR})
+
+    # Define the imported target
+    if(NOT TARGET PROJ::proj)
+        add_library(PROJ::proj STATIC IMPORTED)
+        set_target_properties(PROJ::proj PROPERTIES
+            IMPORTED_LOCATION "${PROJ_LIBRARY}"
+            INTERFACE_INCLUDE_DIRECTORIES "${PROJ_INCLUDE_DIR}"
+        )
     endif()
-else()
-    # First check with CMake config files, and then fallback to the FindPROJ module.
-    find_package(PROJ CONFIG)
-    if (PROJ_FOUND AND PROJ_VERSION VERSION_LESS "8")
-        message(WARNING "PROJ ${PROJ_VERSION} < 8 found with Config file. As it is not trusted, retrying with module mode")
-    endif()
-    if (PROJ_FOUND)
-      if (NOT BUILD_SHARED_LIBS)
-        string(APPEND GDAL_IMPORT_DEPENDENCIES "find_dependency(PROJ CONFIG)\n")
-      endif()
-    else()
-      find_package(PROJ REQUIRED)
-      if (NOT BUILD_SHARED_LIBS)
-        string(APPEND GDAL_IMPORT_DEPENDENCIES "find_dependency(PROJ)\n")
-      endif()
-    endif ()
 endif()
+
 if (DEFINED PROJ_VERSION_STRING AND NOT DEFINED PROJ_VERSION)
     set(PROJ_VERSION ${PROJ_VERSION_STRING})
 endif()
