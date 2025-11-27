@@ -143,13 +143,19 @@ endif()
 #   message(FATAL_ERROR "PROJ >= 6.3 required. Version ${PROJ_VERSION} found")
 # endif()
 
-gdal_check_package(TIFF "Support for the Tag Image File Format (TIFF)." VERSION 4.1 CAN_DISABLE)
-set_package_properties(
-  TIFF PROPERTIES
-  URL "https://libtiff.gitlab.io/libtiff/"
-  DESCRIPTION "Support for the Tag Image File Format (TIFF)."
-  TYPE RECOMMENDED)
-gdal_internal_library(TIFF)
+# --- TIFF OVERRIDE ---
+if(DEFINED TIFF_LIBRARY)
+    message(STATUS "Build-system: Using manual TIFF: ${TIFF_LIBRARY}")
+    set(TIFF_FOUND ON)
+    set(GDAL_USE_TIFF ON)
+    if(NOT TARGET TIFF::TIFF)
+        add_library(TIFF::TIFF STATIC IMPORTED)
+        set_target_properties(TIFF::TIFF PROPERTIES
+            IMPORTED_LOCATION "${TIFF_LIBRARY}"
+            INTERFACE_INCLUDE_DIRECTORIES "${TIFF_INCLUDE_DIR}"
+        )
+    endif()
+endif()
 
 if (DEFINED ENV{CONDA_PREFIX} AND UNIX)
     # Currently on Unix, the Zstd cmake config file is buggy. It declares a
