@@ -4,6 +4,27 @@ cmake_minimum_required(VERSION ${GDAL_CMAKE_VERSION_MIN}...${GDAL_CMAKE_VERSION_
 
 project(gdal LANGUAGES C CXX)
 
+# =============================================================================
+message(STATUS "--- [FORK] Applying Static Cross-Compilation Lockdown ---")
+
+set(BUILD_PYTHON_BINDINGS OFF CACHE BOOL "Force disable Python" FORCE)
+set(HDF5_FOUND FALSE CACHE INTERNAL "Force HDF5 Not Found" FORCE)
+set(NetCDF_FOUND FALSE CACHE INTERNAL "Force NetCDF Not Found" FORCE)
+set(Arrow_FOUND FALSE CACHE INTERNAL "Force Arrow Not Found" FORCE)
+set(Parquet_FOUND FALSE CACHE INTERNAL "Force Parquet Not Found" FORCE)
+set(JXL_FOUND FALSE CACHE INTERNAL "Force JPEG-XL Not Found" FORCE)
+set(WebP_FOUND FALSE CACHE INTERNAL "Force WebP Not Found" FORCE)
+set(OpenSSL_FOUND FALSE CACHE INTERNAL "Force OpenSSL Not Found" FORCE)
+set(CURL_FOUND FALSE CACHE INTERNAL "Force CURL Not Found" FORCE)
+set(Podofo_FOUND FALSE CACHE INTERNAL "Force Podofo Not Found" FORCE)
+set(Poppler_FOUND FALSE CACHE INTERNAL "Force Poppler Not Found" FORCE)
+set(X11_FOUND FALSE CACHE INTERNAL "Force X11 Not Found" FORCE)
+set(Iconv_FOUND FALSE CACHE INTERNAL "Force Iconv Not Found" FORCE)
+set(GDAL_USE_HDF5 OFF CACHE BOOL "Disable HDF5" FORCE)
+set(GDAL_USE_CURL OFF CACHE BOOL "Disable CURL" FORCE)
+set(GDAL_USE_OPENSSL OFF CACHE BOOL "Disable OpenSSL" FORCE)
+# =============================================================================
+
 set(GDAL_LIB_TARGET_NAME GDAL)
 
 #
@@ -166,21 +187,6 @@ if (APPLE)
   endif ()
 endif ()
 
-#
-# Developer may want to specify some variable to find proper version.
-# ~~~
-# Priority is as same order as follows:
-#   1. `Python_LOOKUP_VERSION`: specify major.minor version to find.
-#   2. 'Python_FIND_VIRTUALENV': specify 'ONLY' to use virtualenv activated.
-#   3. `Python_ROOT`: specify installed location.
-#   4. If nothing specified, use default behavior.
-#
-# for example
-#   $ cmake -DPython_LOOKUP_VERSION=3.8.0 ..
-#   $ cmake -DPython_FIND_VIRTUALENV=ONLY ..
-#   $ cmake -DPython_ROOT=C:\Python38 ..
-# ~~~
-#
 include(FeatureSummary)
 
 find_package(SWIG)
@@ -206,7 +212,9 @@ if (Python_LOOKUP_VERSION)
     find_package(Python ${Python_LOOKUP_VERSION} EXACT COMPONENTS Interpreter Development NumPy)
 else ()
     set(Python_FIND_STRATEGY LOCATION)
-    find_package(Python 3.8 COMPONENTS Interpreter Development NumPy)
+    if(BUILD_PYTHON_BINDINGS)
+        find_package(Python 3.8 COMPONENTS Interpreter Development NumPy)
+    endif()
 endif ()
 set_package_properties(Python PROPERTIES PURPOSE "SWIG_PYTHON: Python binding")
 
