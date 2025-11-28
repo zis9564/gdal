@@ -36,6 +36,10 @@
 
 #include "libtiff_codecs.h"
 
+#ifdef LERC_SUPPORT
+#undef LERC_SUPPORT
+#endif
+
 #define STRINGIFY(x) #x
 #define XSTRINGIFY(x) STRINGIFY(x)
 
