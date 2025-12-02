@@ -438,7 +438,7 @@ add_subdirectory(ogr/ogrsf_frmts)
 add_subdirectory(gcore)
 
 # Bindings
-if (BUILD_SHARED_LIBS)
+if (BUILD_SHARED_LIBS OR GDAL_BUILD_JAVA_BINDINGS)
   add_subdirectory(swig)
 endif ()
 
