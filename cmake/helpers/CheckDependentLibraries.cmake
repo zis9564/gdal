@@ -89,13 +89,13 @@ endif()
 
 gdal_check_package(LibXml2 "Read and write XML formats" CAN_DISABLE)
 
-# --- EXPAT OVERRIDE ---
+# EXPAT OVERRIDE
 if(DEFINED EXPAT_LIBRARY)
     message(STATUS "Build-system: Using manual EXPAT: ${EXPAT_LIBRARY}")
-    set(EXPAT_FOUND ON)
-    set(GDAL_USE_EXPAT ON)
-    set(EXPAT_LIBRARIES EXPAT::EXPAT)
-    set(EXPAT_INCLUDE_DIRS ${EXPAT_INCLUDE_DIR})
+    set(EXPAT_FOUND ON CACHE BOOL "" FORCE)
+    set(GDAL_USE_EXPAT ON CACHE BOOL "" FORCE)
+    set(EXPAT_LIBRARIES EXPAT::EXPAT CACHE INTERNAL "")
+    set(EXPAT_INCLUDE_DIRS ${EXPAT_INCLUDE_DIR} CACHE INTERNAL "")
 
     if(NOT TARGET EXPAT::EXPAT)
         add_library(EXPAT::EXPAT STATIC IMPORTED)
@@ -120,13 +120,13 @@ if (GDAL_USE_CRYPTOPP)
   option(CRYPTOPP_USE_ONLY_CRYPTODLL_ALG "Use Only cryptoDLL alg. only work on dynamic DLL" OFF)
 endif ()
 
-# --- CUSTOM PATCH: Manual PROJ Override ---
+# PROJ OVERRIDE
 if(DEFINED PROJ_LIBRARY AND DEFINED PROJ_INCLUDE_DIR)
     message(STATUS "Build-system: Using manual PROJ static lib: ${PROJ_LIBRARY}")
-    set(PROJ_FOUND ON)
-    set(GDAL_USE_PROJ ON)
-    set(PROJ_LIBRARIES PROJ::proj)
-    set(PROJ_INCLUDE_DIRS ${PROJ_INCLUDE_DIR})
+    set(PROJ_FOUND ON CACHE BOOL "" FORCE)
+    set(GDAL_USE_PROJ ON CACHE BOOL "" FORCE)
+    set(PROJ_LIBRARIES PROJ::proj CACHE INTERNAL "")
+    set(PROJ_INCLUDE_DIRS ${PROJ_INCLUDE_DIR} CACHE INTERNAL "")
 
     if(NOT TARGET PROJ::proj)
         add_library(PROJ::proj STATIC IMPORTED)
@@ -145,13 +145,13 @@ endif()
 #   message(FATAL_ERROR "PROJ >= 6.3 required. Version ${PROJ_VERSION} found")
 # endif()
 
-# --- TIFF OVERRIDE ---
+# TIFF OVERRIDE
 if(DEFINED TIFF_LIBRARY)
     message(STATUS "Build-system: Using manual TIFF: ${TIFF_LIBRARY}")
-    set(TIFF_FOUND ON)
-    set(GDAL_USE_TIFF ON)
-    set(TIFF_LIBRARIES TIFF::TIFF)
-    set(TIFF_INCLUDE_DIRS ${TIFF_INCLUDE_DIR})
+    set(TIFF_FOUND ON CACHE BOOL "" FORCE)
+    set(GDAL_USE_TIFF ON CACHE BOOL "" FORCE)
+    set(TIFF_LIBRARIES TIFF::TIFF CACHE INTERNAL "")
+    set(TIFF_INCLUDE_DIRS ${TIFF_INCLUDE_DIR} CACHE INTERNAL "")
 
     if(NOT TARGET TIFF::TIFF)
         add_library(TIFF::TIFF STATIC IMPORTED)
@@ -259,7 +259,7 @@ if (NOT GDAL_USE_PCRE2)
   gdal_check_package(PCRE "Enable PCRE support for sqlite3" CAN_DISABLE)
 endif ()
 
-# --- SQLITE3 OVERRIDE ---
+# SQLITE3 OVERRIDE
 if(DEFINED SQLITE3_LIBRARY)
     message(STATUS "Build-system: Using manual SQLite3: ${SQLITE3_LIBRARY}")
     set(SQLite3_FOUND ON CACHE BOOL "" FORCE)
