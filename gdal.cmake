@@ -552,19 +552,7 @@ install(
   PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   FRAMEWORK DESTINATION "${FRAMEWORK_DESTINATION}")
 
-# Generate targets file for importing directly from GDAL build tree
-export(TARGETS ${GDAL_LIB_TARGET_NAME}
-        NAMESPACE GDAL::
-        FILE "GDAL-targets.cmake")
-
 if (NOT GDAL_ENABLE_MACOSX_FRAMEWORK)
-  # Generate GdalConfig.cmake and GdalConfigVersion.cmake
-  install(
-    EXPORT gdal-export
-    FILE GDAL-targets.cmake
-    NAMESPACE GDAL::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/gdal/
-    EXPORT_LINK_INTERFACE_LIBRARIES)
   if (NOT BUILD_SHARED_LIBS)
     install(
       FILES
